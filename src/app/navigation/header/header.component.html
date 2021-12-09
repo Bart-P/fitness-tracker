@@ -1,1 +1,14 @@
-<p>header works!</p>
+<mat-toolbar color="primary">
+  <div fxHide.gt-xs="true">
+    <button mat-icon-button (click)="onToggleSideNav()"><mat-icon>menu</mat-icon></button>
+  </div>
+  <a routerLink="/">LOGO</a>
+  <div fxFlex="" fxLayout="row" fxLayoutAlign="flex-end" fxHide.xs="true">
+    <ul fxLayout="" class="nav-items" fxLayoutGap="10px">
+      <li><a routerLink="/signup">Signup</a></li>
+      <li><a routerLink="/login">Login</a></li>
+      <li><a routerLink="/training">Training</a></li>
+      <li><a>Logout</a></li>
+    </ul>
+  </div>
+</mat-toolbar>
