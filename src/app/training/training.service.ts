@@ -6,6 +6,7 @@ import {Subject} from "rxjs";
 export class TrainingService {
   exerciseChanged = new Subject<Exercise>();
   private runningExercise: Exercise;
+  private exercises: Exercise[] = [];
 
   private availableExercises: Exercise[] = [
     {id: 'crunches', name: 'Crunches', duration: 30, caloriesBurned: 8},
@@ -23,7 +24,29 @@ export class TrainingService {
     this.exerciseChanged.next({...this.runningExercise});
   }
 
+  completeExercise() {
+    this.exercises.push({...this.runningExercise, date: new Date(), state: 'completed'});
+    this.runningExercise = null;
+    this.exerciseChanged.next(null);
+  }
+
+  cancelExercise(progress: number) {
+    this.exercises.push({
+      ...this.runningExercise,
+      duration: this.runningExercise.duration * (progress / 100),
+      caloriesBurned: this.runningExercise.caloriesBurned * (progress / 100),
+      date: new Date(),
+      state: 'cancelled'
+    });
+    this.runningExercise = null;
+    this.exerciseChanged.next(null);
+  }
+
   getRunningExercise() {
     return {...this.runningExercise};
+  }
+
+  getCompletedExercises() {
+    return this.exercises.slice();
   }
 }
