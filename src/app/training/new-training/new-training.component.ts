@@ -1,7 +1,8 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TrainingService} from "../training.service";
-import {Exercise} from "../exercise.model";
 import {NgForm} from "@angular/forms";
+import {Subscription} from "rxjs";
+import {Exercise} from "../exercise.model";
 
 @Component({
   selector: 'app-new-training',
@@ -9,16 +10,23 @@ import {NgForm} from "@angular/forms";
   styleUrls: ['./new-training.component.css']
 })
 
-export class NewTrainingComponent implements OnInit {
+export class NewTrainingComponent implements OnInit, OnDestroy {
   @Output() startWorkoutEmitter = new EventEmitter<void>()
-  exercises: Exercise[] = [];
+  exerciseSubscription: Subscription;
+  exercises: Exercise[];
 
   constructor(private trainingService: TrainingService) {
   }
 
-
   ngOnInit(): void {
-    this.exercises = this.trainingService.getAvailableExercise();
+    this.exerciseSubscription = this.trainingService.exercisesChanged
+      .subscribe(exercises => this.exercises = exercises);
+
+    this.trainingService.fetchAvailableExercise();
+  }
+
+  ngOnDestroy(): void {
+    this.exerciseSubscription.unsubscribe();
   }
 
   onStartWorkout(form: NgForm) {
