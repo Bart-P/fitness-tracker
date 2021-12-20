@@ -10,7 +10,7 @@ import {TrainingService} from "../training.service";
 })
 export class CurrentTrainingComponent implements OnInit {
   progress = 0;
-  timer: number;
+  timer;
 
   constructor(private dialog: MatDialog, private trainingService: TrainingService) {
   }
