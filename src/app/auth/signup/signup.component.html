@@ -7,14 +7,14 @@
     (ngSubmit)="onSubmit(f)">
     <mat-form-field>
       <input
-         type="email"
-         matInput
-         placeholder="Your email"
-         ngModel=""
-         name="email"
-         email
-         #emailInput="ngModel"
-         required>
+        type="email"
+        matInput
+        placeholder="Your email"
+        ngModel=""
+        name="email"
+        email
+        #emailInput="ngModel"
+        required>
       <mat-error *ngIf="emailInput.hasError('required')">Field must not be empty</mat-error>
       <mat-error *ngIf="!emailInput.hasError('required')">Email is invalid!</mat-error>
     </mat-form-field>
@@ -39,15 +39,20 @@
         name="birthdate"
         [matDatepicker]="picker">
       <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker ></mat-datepicker>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-checkbox
       ngModel=""
       name="agreeToTerms"
-      required>Agree to Terms and Conditions</mat-checkbox>
-    <button type="submit"
-            mat-raised-button
-            [disabled]="f.invalid"
-            color="primary">Submit</button>
+      required>Agree to Terms and Conditions
+    </mat-checkbox>
+    <button
+      *ngIf="!isLoading"
+      type="submit"
+      mat-raised-button
+      [disabled]="f.invalid"
+      color="primary">Submit
+    </button>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
   </form>
 </section>

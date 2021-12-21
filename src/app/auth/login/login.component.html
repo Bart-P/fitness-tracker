@@ -10,7 +10,7 @@
       hintLabel="Your Email address is your Login">
       <mat-label>E-Mail</mat-label>
       <input
-        formControlName = "email"
+        formControlName="email"
         type="email"
         matInput>
       <mat-error>Invalid E-Mail</mat-error>
@@ -18,16 +18,19 @@
     <mat-form-field>
       <mat-label>Password</mat-label>
       <input
-        formControlName = "password"
+        formControlName="password"
         type="password"
         matInput>
     </mat-form-field>
     <button
+      *ngIf="!isLoading"
       type="submit"
       color="primary"
       mat-raised-button
       [disabled]="loginForm.invalid">
-      Login</button>
+      Login
+    </button>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
 
   </form>
 </section>

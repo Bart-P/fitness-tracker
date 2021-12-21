@@ -13,6 +13,7 @@ import {environment} from "../environments/environment";
 
 import {AuthService} from "./auth/auth.service";
 import {TrainingService} from "./training/training.service";
+import {UIService} from "./shared/ui.service";
 
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
@@ -51,7 +52,8 @@ import {AngularFireAuthModule} from "@angular/fire/compat/auth";
     AngularFirestoreModule,
     AngularFireAuthModule,
   ],
-  providers: [AuthService, TrainingService],
+  providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -3,6 +3,7 @@ import {TrainingService} from "../training.service";
 import {NgForm} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {Exercise} from "../exercise.model";
+import {UIService} from "../../shared/ui.service";
 
 @Component({
   selector: 'app-new-training',
@@ -14,19 +15,30 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   @Output() startWorkoutEmitter = new EventEmitter<void>()
   exerciseSubscription: Subscription;
   exercises: Exercise[];
+  isLoading = true;
+  loadingSubscription: Subscription;
 
-  constructor(private trainingService: TrainingService) {
+  constructor(private trainingService: TrainingService,
+              private uiService: UIService) {
   }
 
   ngOnInit(): void {
+    this.loadingSubscription = this.uiService.loadingStateChanged
+      .subscribe(isLoading => this.isLoading = isLoading);
+
     this.exerciseSubscription = this.trainingService.exercisesChanged
       .subscribe(exercises => this.exercises = exercises);
 
+    // TODO subscribe from training service to UIService and handle the loadingChange state from
+    //  fetchAvailableExercises where it is actually changed..
+
     this.trainingService.fetchAvailableExercise();
+    this.uiService.loadingStateChanged.next(false);
   }
 
   ngOnDestroy(): void {
     this.exerciseSubscription.unsubscribe();
+    this.loadingSubscription.unsubscribe();
   }
 
   onStartWorkout(form: NgForm) {

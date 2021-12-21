@@ -12,7 +12,7 @@ export class TrainingService {
   private runningExercise: Exercise;
   private firebaseSubs: Subscription[] = [];
 
-  constructor(private db: AngularFirestore) {
+  constructor(private db: AngularFirestore,) {
   }
 
   fetchAvailableExercise() {
