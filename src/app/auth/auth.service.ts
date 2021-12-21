@@ -42,9 +42,7 @@ export class AuthService {
       .then(() => this.uiService.loadingStateChanged.next(false))
       .catch(error => {
         this.uiService.loadingStateChanged.next(false);
-        this.snackBar.open(error.message, null, {
-          duration: 5000
-        });
+        this.uiService.showSnackBar(error.message, null, 5000);
       })
   }
 

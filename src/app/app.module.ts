@@ -1,6 +1,4 @@
 import {AppComponent} from './app.component';
-import {SignupComponent} from './auth/signup/signup.component';
-import {LoginComponent} from './auth/login/login.component';
 import {TrainingComponent} from './training/training.component';
 import {CurrentTrainingComponent} from './training/current-training/current-training.component';
 import {NewTrainingComponent} from './training/new-training/new-training.component';
@@ -25,12 +23,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AngularFireModule} from "@angular/fire/compat";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
+import {AuthModule} from "./auth/auth.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignupComponent,
-    LoginComponent,
     TrainingComponent,
     CurrentTrainingComponent,
     NewTrainingComponent,
@@ -46,11 +43,12 @@ import {AngularFireAuthModule} from "@angular/fire/compat/auth";
     MaterialModule,
     AppRoutingModule,
     FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
+    FormsModule, // to be deleted after creating Training module
+    ReactiveFormsModule, // to be deleted after creating Training module
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AuthModule,
   ],
   providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],

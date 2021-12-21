@@ -1,6 +1,6 @@
 import {Exercise} from "./exercise.model";
 import {Injectable} from "@angular/core";
-import {map, Subject, Subscription} from "rxjs";
+import {catchError, map, Subject, Subscription} from "rxjs";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UIService} from "../shared/ui.service";
 
@@ -25,6 +25,7 @@ export class TrainingService {
         .collection('availableExercises')
         .snapshotChanges()
         .pipe(map(docData => {
+          // throw Error;
           return docData.map(doc => {
             return {
               id: doc.payload.doc.id,
@@ -33,6 +34,12 @@ export class TrainingService {
               caloriesBurned: doc.payload.doc.data()['caloriesBurned'],
             } as Exercise;
           })
+        }), catchError(() => {
+          this.uiService.loadingStateChanged.next(false);
+          this.uiService.showSnackBar("Fetching available exercises failed, please try" +
+            " again later", null, 5000);
+          this.exercisesChanged.next(null);
+          throw new Error();
         }))
         .subscribe((exercises: Exercise[]) => {
           this.availableExercises = exercises;

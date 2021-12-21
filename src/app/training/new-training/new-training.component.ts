@@ -30,6 +30,10 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.exerciseSubscription = this.trainingService.exercisesChanged
       .subscribe(exercises => this.exercises = exercises);
 
+    this.fetchExercises();
+  }
+
+  fetchExercises() {
     this.trainingService.fetchAvailableExercise();
   }
 
@@ -41,4 +45,5 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   onStartWorkout(form: NgForm) {
     this.trainingService.startExercise(form.value.selectedExerciseId);
   }
+
 }
