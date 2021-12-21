@@ -19,7 +19,8 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   loadingSubscription: Subscription;
 
   constructor(private trainingService: TrainingService,
-              private uiService: UIService) {
+              private uiService: UIService,
+  ) {
   }
 
   ngOnInit(): void {
@@ -29,11 +30,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.exerciseSubscription = this.trainingService.exercisesChanged
       .subscribe(exercises => this.exercises = exercises);
 
-    // TODO subscribe from training service to UIService and handle the loadingChange state from
-    //  fetchAvailableExercises where it is actually changed..
-
     this.trainingService.fetchAvailableExercise();
-    this.uiService.loadingStateChanged.next(false);
   }
 
   ngOnDestroy(): void {
