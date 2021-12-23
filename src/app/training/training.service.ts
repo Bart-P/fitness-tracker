@@ -25,7 +25,6 @@ export class TrainingService {
         .collection('availableExercises')
         .snapshotChanges()
         .pipe(map(docData => {
-          // throw Error;
           return docData.map(doc => {
             return {
               id: doc.payload.doc.id,
@@ -89,6 +88,10 @@ export class TrainingService {
   }
 
   cancelSubscriptions() {
-    this.firebaseSubs.forEach(sub => sub.unsubscribe());
+    this.firebaseSubs.forEach(sub => {
+        if (sub) sub.unsubscribe();
+      }
+    )
+    ;
   }
 }
