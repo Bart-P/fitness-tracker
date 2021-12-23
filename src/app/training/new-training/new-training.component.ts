@@ -1,9 +1,10 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TrainingService} from "../training.service";
 import {NgForm} from "@angular/forms";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {Exercise} from "../exercise.model";
-import {UIService} from "../../shared/ui.service";
+import {Store} from "@ngrx/store";
+import * as fromRoot from '../../app.reducer'
 
 @Component({
   selector: 'app-new-training',
@@ -15,17 +16,16 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   @Output() startWorkoutEmitter = new EventEmitter<void>()
   exerciseSubscription: Subscription;
   exercises: Exercise[];
-  isLoading = true;
+  isLoading$: Observable<boolean>;
   loadingSubscription: Subscription;
 
   constructor(private trainingService: TrainingService,
-              private uiService: UIService,
+              private store: Store<fromRoot.State>,
   ) {
   }
 
   ngOnInit(): void {
-    this.loadingSubscription = this.uiService.loadingStateChanged
-      .subscribe(isLoading => this.isLoading = isLoading);
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
 
     this.exerciseSubscription = this.trainingService.exercisesChanged
       .subscribe(exercises => this.exercises = exercises);
@@ -39,7 +39,6 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.exerciseSubscription) this.exerciseSubscription.unsubscribe();
-    if (this.loadingSubscription) this.loadingSubscription.unsubscribe();
   }
 
   onStartWorkout(form: NgForm) {
