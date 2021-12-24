@@ -6,20 +6,21 @@ export interface State {
 
 const initialState: State = {
   isAuthenticated: false,
-}
+};
 
 export function authReducer(state = initialState, action: AuthActions) {
   switch (action.type) {
     case SET_AUTHENTICATED:
-      return {isAuthenticated: true};
+      return {
+        isAuthenticated: true
+      };
     case SET_UNAUTHENTICATED:
-      return {isAuthenticated: false};
+      return {
+        isAuthenticated: false
+      };
     default:
       return state;
   }
 }
 
-export const getIsAuthenticated = (state: State) => {
-  console.log(state.isAuthenticated)
-  return state.isAuthenticated;
-};
+export const getIsAuthenticated = (state: State) => state.isAuthenticated;

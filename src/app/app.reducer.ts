@@ -3,8 +3,8 @@ import * as fromAuth from './auth/auth.reducer'
 import {ActionReducerMap, createFeatureSelector, createSelector} from "@ngrx/store";
 
 export interface State {
-  ui: fromUI.State,
-  auth: fromAuth.State,
+  ui: fromUI.State;
+  auth: fromAuth.State;
 }
 
 export const reducers: ActionReducerMap<State> = {

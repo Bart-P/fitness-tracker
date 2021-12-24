@@ -4,8 +4,9 @@ import {catchError, map, Subject, Subscription} from "rxjs";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {UIService} from "../shared/ui.service";
 import {Store} from "@ngrx/store";
-import * as fromRoot from '../app.reducer';
+import * as fromTraining from './training.reducer';
 import * as UI from '../shared/ui.actions';
+import * as Training from './training.actions';
 
 @Injectable()
 export class TrainingService {
@@ -18,7 +19,7 @@ export class TrainingService {
 
   constructor(private db: AngularFirestore,
               private uiService: UIService,
-              private store: Store<fromRoot.State>,
+              private store: Store<fromTraining.State>,
   ) {
   }
 
@@ -45,8 +46,7 @@ export class TrainingService {
           throw new Error();
         }))
         .subscribe((exercises: Exercise[]) => {
-          this.availableExercises = exercises;
-          this.exercisesChanged.next([...this.availableExercises]);
+          this.store.dispatch(new Training.SetAvailableTraining(exercises))
           this.store.dispatch(new UI.StopLoading())
         }));
   }
@@ -58,8 +58,7 @@ export class TrainingService {
 
   completeExercise() {
     this.addExerciseToDb({...this.runningExercise, date: new Date(), state: 'completed'});
-    this.runningExercise = null;
-    this.exerciseChanged.next(null);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   cancelExercise(progress: number) {
@@ -70,8 +69,7 @@ export class TrainingService {
       date: new Date(),
       state: 'cancelled'
     });
-    this.runningExercise = null;
-    this.exerciseChanged.next(null);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   getRunningExercise() {
@@ -83,12 +81,21 @@ export class TrainingService {
       this.db.collection('finishedExercises')
         .valueChanges()
         .subscribe((exercises: Exercise[]) => {
-          this.finishedExercisesChanged.next(exercises);
+          this.store.dispatch(new Training.SetFinishedTraining(exercises))
         }));
   }
 
   private addExerciseToDb(exercise: Exercise) {
-    this.db.collection('finishedExercises').add!(exercise);
+    this.db.collection('finishedExercises')
+      .add(exercise)
+      .then(() =>
+        this.uiService
+          .showSnackBar(
+            'Finished training saved to database.',
+            null,
+            5000
+          )
+      );
   }
 
   cancelSubscriptions() {
@@ -96,6 +103,5 @@ export class TrainingService {
         if (sub) sub.unsubscribe();
       }
     )
-    ;
-  }
+  };
 }
