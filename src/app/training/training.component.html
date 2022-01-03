@@ -1,9 +1,9 @@
-<mat-tab-group *ngIf="!ongoingWorkout">
+<mat-tab-group *ngIf="!(ongoingWorkout$ | async)">
   <mat-tab label="New Workout">
-    <app-new-training (startWorkoutEmitter)="ongoingWorkout = true"></app-new-training>
+    <app-new-training></app-new-training>
   </mat-tab>
   <mat-tab label="Past Workouts">
     <app-past-trainings></app-past-trainings>
   </mat-tab>
 </mat-tab-group>
-<app-current-training *ngIf="ongoingWorkout"></app-current-training>
+<app-current-training *ngIf="ongoingWorkout$ | async"></app-current-training>
